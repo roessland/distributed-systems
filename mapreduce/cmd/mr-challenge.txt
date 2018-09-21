@@ -1,0 +1,10 @@
+www: 8 input/pg-being_ernest.txt,input/pg-dorian_gray.txt,input/pg-frankenstein.txt,input/pg-grimm.txt,input/pg-huckleberry_finn.txt,input/pg-metamorphosis.txt,input/pg-sherlock_holmes.txt,input/pg-tom_sawyer.txt
+year: 8 input/pg-being_ernest.txt,input/pg-dorian_gray.txt,input/pg-frankenstein.txt,input/pg-grimm.txt,input/pg-huckleberry_finn.txt,input/pg-metamorphosis.txt,input/pg-sherlock_holmes.txt,input/pg-tom_sawyer.txt
+years: 8 input/pg-being_ernest.txt,input/pg-dorian_gray.txt,input/pg-frankenstein.txt,input/pg-grimm.txt,input/pg-huckleberry_finn.txt,input/pg-metamorphosis.txt,input/pg-sherlock_holmes.txt,input/pg-tom_sawyer.txt
+yesterday: 8 input/pg-being_ernest.txt,input/pg-dorian_gray.txt,input/pg-frankenstein.txt,input/pg-grimm.txt,input/pg-huckleberry_finn.txt,input/pg-metamorphosis.txt,input/pg-sherlock_holmes.txt,input/pg-tom_sawyer.txt
+yet: 8 input/pg-being_ernest.txt,input/pg-dorian_gray.txt,input/pg-frankenstein.txt,input/pg-grimm.txt,input/pg-huckleberry_finn.txt,input/pg-metamorphosis.txt,input/pg-sherlock_holmes.txt,input/pg-tom_sawyer.txt
+you: 8 input/pg-being_ernest.txt,input/pg-dorian_gray.txt,input/pg-frankenstein.txt,input/pg-grimm.txt,input/pg-huckleberry_finn.txt,input/pg-metamorphosis.txt,input/pg-sherlock_holmes.txt,input/pg-tom_sawyer.txt
+young: 8 input/pg-being_ernest.txt,input/pg-dorian_gray.txt,input/pg-frankenstein.txt,input/pg-grimm.txt,input/pg-huckleberry_finn.txt,input/pg-metamorphosis.txt,input/pg-sherlock_holmes.txt,input/pg-tom_sawyer.txt
+your: 8 input/pg-being_ernest.txt,input/pg-dorian_gray.txt,input/pg-frankenstein.txt,input/pg-grimm.txt,input/pg-huckleberry_finn.txt,input/pg-metamorphosis.txt,input/pg-sherlock_holmes.txt,input/pg-tom_sawyer.txt
+yourself: 8 input/pg-being_ernest.txt,input/pg-dorian_gray.txt,input/pg-frankenstein.txt,input/pg-grimm.txt,input/pg-huckleberry_finn.txt,input/pg-metamorphosis.txt,input/pg-sherlock_holmes.txt,input/pg-tom_sawyer.txt
+zip: 8 input/pg-being_ernest.txt,input/pg-dorian_gray.txt,input/pg-frankenstein.txt,input/pg-grimm.txt,input/pg-huckleberry_finn.txt,input/pg-metamorphosis.txt,input/pg-sherlock_holmes.txt,input/pg-tom_sawyer.txt

@@ -2,8 +2,27 @@ package mapreduce
 
 import (
 	"fmt"
+	"log"
 	"sync"
 )
+
+// Gives work to a specific worker
+func runWorker(worker string, work chan DoTaskArgs, wg *sync.WaitGroup) {
+	for doTaskArgs := range work {
+		log.Println("Attempting to make worker", worker, "do stuff")
+		successful := call(worker, "Worker.DoTask", doTaskArgs, nil)
+		if successful {
+			log.Println("TaskNumber", doTaskArgs.TaskNumber, "is done")
+			wg.Done()
+		} else {
+			log.Println("Worker", worker, "failed.")
+			// Reschedule task and exit worker communication thread
+			work <- doTaskArgs
+			log.Println("Worker", worker, "returned work", doTaskArgs.TaskNumber, "to pool")
+			return
+		}
+	}
+}
 
 //
 // schedule() starts and waits for all tasks in the given phase (mapPhase
@@ -14,7 +33,7 @@ import (
 // suitable for passing to call(). registerChan will yield all
 // existing registered workers (if any) and new ones as they register.
 //
-func schedule(jobName string, mapFiles []string, nReduce int, phase jobPhase, registerChan chan string) {
+func schedule(jobName string, mapFiles []string, nReduce int, phase jobPhase, registerChan <-chan string) {
 	var ntasks int
 	var n_other int // number of inputs (for reduce) or outputs (for map)
 	switch phase {
@@ -50,25 +69,25 @@ func schedule(jobName string, mapFiles []string, nReduce int, phase jobPhase, re
 			}
 			work <- doTaskArgs
 		}
-		close(work)
-		close(registerChan)
 	}()
 
 	// Delegate work
 	wg := sync.WaitGroup{}
 	wg.Add(ntasks)
-	for worker := range registerChan {
-		go func(worker string) {
-			for doTaskArgs := range work {
-				successful := false
-				for !successful {
-					successful = call(worker, "Worker.DoTask", doTaskArgs, nil)
-				}
-				wg.Done()
+	done := make(chan bool)
+	go func() {
+		for {
+			select {
+			case <-done:
+				return
+			case worker := <-registerChan:
+				go runWorker(worker, work, &wg)
 			}
-		}(worker)
-	}
+		}
+	}()
 	wg.Wait()
+	close(work)
+	done <- true
 
 	fmt.Printf("Schedule: %v done\n", phase)
 }
