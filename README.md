@@ -17,7 +17,7 @@ My notes and code examples related to distributed systems.
 [Resources on learning system design (Reddit)](https://www.reddit.com/r/cscareerquestions/comments/5u825g/resources_on_learning_system_design_and_data/)
 
 ## Books
- - (**in progress, ch1/9**) ch1 Distributed Systems (van Steen, Tanenbaum, 2017)
+ - (**in progress, ch1/9**) [Distributed Systems (van Steen, Tanenbaum, 2017)](https://www.distributed-systems.net/)
 
 ## Videos/Lectures
 
