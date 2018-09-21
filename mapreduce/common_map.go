@@ -90,7 +90,6 @@ func doMap(
 	//
 	// Your code here (Part I).
 	//
-	log.Print("doMap done")
 }
 
 func ihash(s string) int {
