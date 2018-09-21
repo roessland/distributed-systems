@@ -28,6 +28,8 @@ Focus on typical single points of failure.
 ## Blogs
 
 - [High Scalability](http://highscalability.com/)
+- [DBMS Musings](http://dbmsmusings.blogspot.com/2018/09/newsql-database-systems-are-failing-to.html)
+    - [x] [NewSQL database systems are failing to guarantee consistency, and I blame Spanner](http://dbmsmusings.blogspot.com/2018/09/newsql-database-systems-are-failing-to.html)
 
 ## Keywords and notes
 
@@ -104,6 +106,7 @@ Focus on typical single points of failure.
         - [ ] B: For writes and reads (scales, but there are cons)
     - [ ] Consistent hashing
     - [ ] Network partitioning (what to do for reads? for writes?)
+    - [ ]
 - [ ] Microservices pattern
 - [ ] Messages
     - [ ] Message queues
