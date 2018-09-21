@@ -1,0 +1,67 @@
+= Chapter 1: Introduction
+
+== 1.1 distributed systems
+- distributed system: appears to users as a single coherent system.
+- achieve common goal using message passing
+- no global clock
+- overlay network
+  - structured: each node has well-defined neighbors
+    - tree, ring structure
+  - unstructured: each node reference random nodes
+  - should be "connected" -- all nodes can reach each other indirectly or
+    directly (at least p2p)
+- single coherent system
+  - distribution transparency: the fact that the system is distributed is not
+    a concern for the user
+    - need to hide failure and latency
+- middleware across machines - same interface to the system
+- typical middleware services:
+  - communication / RPC
+  - transactions (all or nothing)
+  - service composition
+  - reliability
+
+== 1.2 design goals
+- resource sharing
+  - hide the fact that resources are networked / distributed
+- distribution transparency
+  - access: how objects are acccessed
+  - location: hide location
+  - relocation: things can be moved behind the scenes, even while in use
+  - hide replication
+  - concurrency: hide that object is shared
+  - failure: hide failure and recovery
+- IDL interace definition language
+- be scalable
+- be geographically scalable - async, latency and failure tolerance
+- have replication
+- use caching
+- tolerate inconsistency
+- distributed systems false assumptions
+  - network is reliable
+  - network is secure
+  - network is homegeneous
+  - topology doesn't change
+  - latency is zero
+  - bandwidth is infinite
+  - transport cost is zero
+  - there is one administrator
+
+== 1.3 Types of distributed systems
+- DSM distributed shared-memory multicomputers -- use virtual address space to
+  share memory between machines. Elegant idea, often fails in practice.
+  (Message passing costs are hidden)
+- distributed transactions -- including RPC calls
+- transactions are ACID
+  - atomic -- occurs indivisibly to the outside world
+  - consistent
+  - isolated -- concurrent transactions are independent
+  - durable -- a committed transaction is permanent
+- can have nested subtransactions
+- con to RPC: not async
+- autonomy and ubuiquitous computing environments
+  - services should be able to act autonomously
+  - DHCP
+  - UPnP
+  - Automatic updates
+
