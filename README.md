@@ -5,9 +5,9 @@ My notes and code examples related to distributed systems.
 
 ## Courses
 
-- [ ] (MIT 6.033 Computer System Engineering)[http://web.mit.edu/6.033/www/)
-- [ ] (MIT 6.828 Operating System Engineering)[https://pdos.csail.mit.edu/6.828/2018/schedule.html]
-- [ ] (in progress) [MIT 6.824 Distributed Systems 16 week course](http://nil.csail.mit.edu/6.824/2017/)
+- [ ] [MIT 6.033 Computer System Engineering](http://web.mit.edu/6.033/www/)
+- [ ] [MIT 6.828 Operating System Engineering](https://pdos.csail.mit.edu/6.828/2018/schedule.html)
+- [ ] (**in progress**) [MIT 6.824 Distributed Systems 16 week course](http://nil.csail.mit.edu/6.824/2017/)
 
 - [ ] Kubernetes EdX course
 
@@ -106,7 +106,6 @@ Focus on typical single points of failure.
         - [ ] B: For writes and reads (scales, but there are cons)
     - [ ] Consistent hashing
     - [ ] Network partitioning (what to do for reads? for writes?)
-    - [ ]
 - [ ] Microservices pattern
 - [ ] Messages
     - [ ] Message queues
