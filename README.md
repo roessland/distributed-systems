@@ -2,9 +2,12 @@
 
 My notes and code examples related to distributed systems.
 
+
 ## Courses
 
-- (in progress) [MIT 6.824 Distributed Systems 16 week course](http://nil.csail.mit.edu/6.824/2017/)
+- [ ] MIT 6.033 Computer System Engineering[http://web.mit.edu/6.033/www/)
+- [ ] MIT 6.828 Operating System Engineering[https://pdos.csail.mit.edu/6.828/2018/schedule.html]
+- [ ] (in progress) [MIT 6.824 Distributed Systems 16 week course](http://nil.csail.mit.edu/6.824/2017/)
 
 - [ ] Kubernetes EdX course
 
@@ -14,6 +17,7 @@ My notes and code examples related to distributed systems.
 [Resources on learning system design (Reddit)](https://www.reddit.com/r/cscareerquestions/comments/5u825g/resources_on_learning_system_design_and_data/)
 
 ## Videos/Lectures
+
 - [x] [CS75 (Summer 2012) Lecture 9 Scalability Harvard Web DeveloIpment David Malan](https://www.youtube.com/watch?v=-W9F__D3oY4)
 Good summary of standard dns/load balancers/database replication setup.
 Focus on typical single points of failure.
@@ -138,3 +142,4 @@ Focus on typical single points of failure.
     - [ ] Reddit 
     - [ ] Twitter
     - [ ] YouTube
+    - [x] MapReduce
