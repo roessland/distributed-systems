@@ -8,6 +8,8 @@ My notes and code examples related to distributed systems.
 - [ ] [MIT 6.033 Computer System Engineering](http://web.mit.edu/6.033/www/)
 - [ ] [MIT 6.828 Operating System Engineering](https://pdos.csail.mit.edu/6.828/2018/schedule.html)
 - [ ] (**in progress**) [MIT 6.824 Distributed Systems 16 week course](http://nil.csail.mit.edu/6.824/2017/)
+    - [x] [Lab 1: MapReduce implementation](https://github.com/roessland/distributed-systems/tree/master/mapreduce)
+    - [ ] Lab 2: Raft implementation
 
 - [ ] Kubernetes EdX course
 
@@ -27,6 +29,10 @@ Focus on typical single points of failure.
 
 - [x] [Distributed Systems in One Lesson by Tim Berglund (50min version)](https://www.youtube.com/watch?v=Y6Ev8GIlbxc) -- great introduction to what we give up to achieve horizontal scaling.
 
+- [x] [Designing for Understandability: The Raft Consensus Algorithm](https://www.youtube.com/watch?v=vYp4LYbnnW8) - includes demo of Raft visualization usage
+
+## Papers
+- [x] [MapReduce (2004)](http://nil.csail.mit.edu/6.824/2018/papers/mapreduce.pdf)
 
 ## Blogs
 
@@ -98,6 +104,11 @@ Focus on typical single points of failure.
     - [ ] Kubernetes
 - [ ] Distributed key value stores
     - [ ] Distributed agreement protocols
+        - [ ] Raft - Replicated And Fault Tolerant (!)
+            - [x] https://raft.github.io/ Good visualization (RaftScope)
+            - [x] [Students guide to raft (TheSquarePlanet)](https://thesquareplanet.com/blog/students-guide-to-raft/)
+            - [x] http://thesecretlivesofdata.com/raft/
+            - [ ] [Lecture from Raft User Study](https://www.youtube.com/watch?v=YbZ3zDzDnrw)
         - [ ] Paxos
     - [ ] Quorum
     - [ ] Zookeeper

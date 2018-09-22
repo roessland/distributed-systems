@@ -1,0 +1,234 @@
+= MIT 6.824 Distributed Systems
+
+== GFS
+- Google File System
+- Scalable distributed file system for data-intensive applications
+- High fault tolerance
+- Runs on commodity hardware
+- Traditional goals (some shared by GFS):
+  - performance
+  - scalability
+  - reliability (TODO what does that mean?)
+  - availability
+- Untraditional goals:
+  - High focus on fault tolerance
+  - Huge files are the norm
+  - Files are usually appended and not mutated. No random writes.
+  - Write once, read many
+  - Reads are often sequential
+  - Less focus on atomicity due to the points above
+- Files can be appended to concurrently
+  - Merge producers
+  - And read simultaneously
+- Fault tolerance tricks:
+  - Constant monitoring
+  - Replice most important data
+  - Automatic recovery
+  - Checksumming to detect disk faults
+- Master does as little as possible to prevent being a bottleneck
+  - Reads bypass master
+  - Delegate control of a data chunk to a "replica master" for writes
+- Not standard API
+  - Typical ops: create, delete, open, close, read, write
+  - Snapshot
+    - Low-cost copy
+  - Record append
+    - Atomic append from multiple clients
+    - For merging multiple consumers to a single file
+- Single master
+  - Metadata, file lists, chunk leases
+  - Collects info from chunkservers
+    - Heartbeats
+  - Simplifies design and implementation
+  - Needs to minimize involvement in reads and writes
+    - Clients ask which chunkserver to contact
+    - Clients caches master's answer for subsequent requests
+  - Chunk garbage collection
+  - Re-duplication
+- Multiple chunkservers
+- Multiple clients
+- Fixed size chunks identified by 64 bit globally unique ids
+  - Typically 64 MB
+- Caching
+  - Not important since files are huge
+  - Chunks are not cached
+  - Clients cache metadata
+- Clients
+  - Always ask for chunks
+  - Ask master for a list of replicas
+  - Contacts nearest replica
+- Operation log
+  - Changes visible to clients only after log is made permanent
+  - Log is replicated to other nodes
+  - Acknowledgement only after log is replicated
+  - Log writes are batched for replication
+  - Recovery by replaying operation log
+  - Log must be kept small to minimize startup time
+    - Checkpoints when log has grown
+  - Can recover from checkpoint + log replay
+  - Checkpoint is stored as a compact B-tree structue in memory that can be
+    loaded directly into memory without parsing.
+  - Checkpoints are made using "log rotation"
+    - Start logging to new file
+    - In the mean time, apply old log operations and persist checkpoint
+- File regions have various states after mutation
+- File region states
+  - defined (serial write success)
+  - consistent but undefined (concurrent write success)
+  - inconsistent (failure)
+  - defined interspersed with inconsistent (append)
+- Consistency in GFS
+  - Relaxed consistency
+  - Namespace (e.g. file creation / deletion) are atomic
+    - Handled by master
+  - Can lock namespace to guarantee atomicity and correctness
+  - Master log defines order of operations
+    - Can chunkservers utilize this?
+  - Consistency: All clients see the same data regardless of which replica they
+    read from.
+  - Defined region: Consistent, and all clients see the latest mutation.
+- Mutations
+  - Appends are atomically AT LEAST ONCE even for concurrent mutations
+  - This append pattern differs from POSIX
+  - After append the offset which was actually written is returned
+  - Space before appended data may be padding (undefined)
+  - Space before appended data may be a duplicate of the same data
+  - Chunks have version numbers
+    - Stale chunkservers are never given to clients
+    - Stale chunks are garbage collected from the chunkserver asap
+- LECTURE QUESTION: Describe a sequence of events that result in a client
+  reading stale data from GFS
+  - Chunks are inconsistent when...
+    - Write or append fails
+    - Sometimes from concurrent appends (duplicate data on some servers)
+  1) Client A asks master for chunk 0
+  2) Master replies "chunk 0 is on Replica A"
+  3) Client B writes data to Replica B and notifies master
+  4) Client A reads stale data from Replica A (neither client A nor Replica A
+  are aware that Replica A is stale)
+- Master notices when chunks are not replicated enough
+  - Instructs a chunkserver to copy from an existing replica
+- Heartbeat message from chunkserver lists replicas
+- Heartbeat message from master subset of chunks that are deleted
+- Garbage collection is more resilient -- deletion messages may be lost
+- High availability
+  - Both master and chunkserver can be kill -9'd and resume within seconds
+  - Replication level: 3
+  - Master has standby backups
+  - DNS used to get master address
+    - Clients don't have a list of backup masters -- only dns name
+  - Shadow read only masters with slightly stale data
+- Integrity
+  - Checksums 32 bit checksum per 64 KB block
+  - (chunk is broken up into blocks)
+
+== Primary/Backup replication
+- VMWare FT
+
+== Raft
+- Goal: Replicated log
+  - Same commands in same order
+- Execute command AFTER all machines have stored it in their log
+- Failure modes:
+  - Machines can stop
+  - Does not handle wrong computations or byzantine failure
+- Leader election
+- Only leader talks to other servers
+- Leader interacts with clients, does log replication using RPC
+- Followers are completely passive -- responds only to incoming RPCs
+- candidate: temporary state during election
+- terms
+  - two parts
+    - election
+    - normal operation (sometimes)
+  - only one part when we get a split vote (no leader, try again)
+  - servers store what term they believe they are in
+- RPC commands
+  - only two!
+    - RequestVote RPC
+      - Sent by candidates to everyone
+    - AppendEntry RPC
+      - Used by leader during normal operation
+    - A heartbeat is an empty AppendEntry
+- Timeout
+  - If a follower stops receiving AppendEntries (heartbeats) for a length of
+    time it will become a candidate. (electionTimeout) 100-500ms
+- Startup
+  - Everyone is a follower
+- First actions after electionTimeout:
+  - Increment current term
+  - Change itself to candidate
+  - Vote for itself
+  - RequestVote RPCs to everyone
+    - Retries missing response util
+      - Has a majority OR
+      - Receives heartbeat from leader of this or a future term
+        - goes back to follower for that term
+      - OR no-one wins election within electionTimeout (same number) -> splitvote
+        - Increment term and become candidate
+  - Votes for the first candidate that asks
+  - election timeout is chosen randomly within [T, 2T] (T=electionTimeout)
+    - makes split brain more unlikely
+- Log structure
+  - Log entry
+    - index, term, command
+  - Log entry is "committed" if node knows that log entry is stored on a
+    majority of servers
+    - Only commited entries are safe to execute in state machine
+    - Committed entries WILL be executed on all machines
+  - Needs to persist log on disk before sending ACK
+  - If two log entries on two different servers have same index and term:
+    - The command is the same!
+  - If an entry is committed -- all preceding entries are also committed
+- Normal operation
+  - No special steps to perform for a new leader
+  - Clients sends command
+  - Leader appends to its log
+  - Leader uses RPC to ask followers to append to their logs
+  - Once leader has enough ACKs to commit:
+    - Leader executes command and returns to client
+    - Leader notifies followers of committed entries using AppendEntries
+      - Leader will retry until majority of ACKs
+  - Leader works to make followers logs equal to leader log
+    - Key observation: non-committed entries can be thrown away
+- AppendEntries RPC
+  - Each RPC contains index, term of entry PRECEDING new ones
+    - If follower does not have that entry
+      - AppendEntry is rejected by follower
+      - Leader decrements nextIndex for that that follower and retries
+- RequestVote RPC
+  - Contains index and term of last log entry
+    - Voters deny RequestVote if its own log is "more complete"
+       - Has higher term entry OR
+       - Has matching term but more entries
+- Safety Requirements
+  - Some nodes cannot be leaders to due old log entries
+    - Their RequestVote RPCs will be denied since the majority has more recent
+      log entries
+- Old leaders sending RPCs
+  - RPC will be rejected by any followers who are up to date
+  - Rejection contains term of follower who rejected RPC
+  - Old leader will update its term to the term in the rejection and steps down
+    to follower
+- Old leader receiving RPC with newer term
+  - Means a new leader has been elected already
+  - Revert to follower
+  - Updates term
+  - Processes RPC normally!
+- Client doesn't know who leader is
+  - Sends command to any server
+  - Gets a redirect to leader in return
+- Client sends command to leader
+  - Leader responds until command is logged commited and executed by leader
+  - If leader times out / crashes
+    - Client must retry to another server
+    - Eventually the client will find a leader
+  - Client must embed a unique ID with each command
+    - Leader only executes command if no previous log entry exists
+    - If command is already in log, return cached response from old command
+  - Result: exactly-once execution as long as client doesn't crash
+- Configuration changes:
+  - Change server ID/network address
+  - Change number of nodes necessary for majority
+  - Complicated stuff!
+  - joint consensus, 2-phase approach to switching configuration
